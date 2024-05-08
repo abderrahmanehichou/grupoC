@@ -1,0 +1,119 @@
+from flask import Flask, jsonify, request
+from Models import db, Paises
+from logging import exception
+
+app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../database/paises.db"
+app.config["SQLALCHEMY_TRAK_MODIFICATIONS"] = False
+db.init_app(app)
+
+
+#Aquí empiezan las rutas
+@app.route("/")
+def home():
+    return "<h1>Welcome home</h1>"
+
+
+@app.route("/api/paises", methods=["GET"])
+def getPaises():
+    try:
+        
+        paises = Paises.query.all()
+        toReturn = [pais.serialize() for pais in paises]
+        return jsonify(toReturn), 200
+
+    except Exception:
+        
+        exception("[SERVER]: Error ->")
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+
+@app.route("/api/pais", methods=["GET"])
+def getPaisByName():
+    try:
+        nombrePais = request.args["nombre"]
+        pais = Paises.query.filter_by(nombre=nombrePais).first()
+        if not pais:
+            return jsonify({"msg": "Este país no está en la lista"}), 200
+        else:
+            return jsonify(pais.serialize()), 200
+    except Exception:
+        exception("[SERVER]: Error ->")
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+    
+@app.route("/api/pais/<string:siglas>", methods=["GET"])
+def getPaisBySigla(siglas):
+    try:
+        pais = Paises.query.get(siglas)
+        if not pais:
+            return jsonify({"msg": "Este país no está en la lista"}), 200
+        else:
+            return jsonify(pais.serialize()), 200
+    except Exception as e:
+        print("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+
+@app.route("/api/pais/<int:poblacion>", methods=["GET"])
+def getPaisesByPoblacion(poblacion):
+    try:
+        paises = Paises.query.filter_by(poblacion=poblacion).all()
+        if not paises:
+            return jsonify({"msg": f"No hay paises con la población de: '{poblacion}'"}), 404
+        else:
+            return jsonify([pais.serialize() for pais in paises]), 200
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+
+
+
+@app.route("/api/pais", methods=["POST"])
+def addPais():
+    try:
+        data = request.json
+        nuevo_pais = Paises(**data)
+        db.session.add(nuevo_pais)
+        db.session.commit()
+        return jsonify({"msg": "País agregado correctamente"}), 201
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+    
+
+
+
+@app.route("/api/pais/<string:siglas>", methods=["PUT"])
+def updatePais(siglas):
+    try:
+        pais = Paises.query.get(siglas)
+        if not pais:
+            return jsonify({"msg": "Este país no está en la lista"}), 404
+        data = request.json
+        for key, value in data.items():
+            setattr(pais, key, value)
+        db.session.commit()
+        return jsonify({"msg": "País actualizado correctamente"}), 200
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+    
+
+
+
+@app.route("/api/pais/<string:siglas>", methods=["DELETE"])
+def deletePais(siglas):
+    try:
+        pais = Paises.query.get(siglas)
+        if not pais:
+            return jsonify({"msg": "Este país no está en la lista"}), 404
+        db.session.delete(pais)
+        db.session.commit()
+        return jsonify({"msg": "País eliminado correctamente"}), 200
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+
+
+
+
+if __name__ =="__main__":
+    app.run(debug=True, port=5000)
