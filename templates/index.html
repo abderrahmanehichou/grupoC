@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Añade una nueva ciudad</h1>
+
+    <form action="/api/addpais" method="post">
+        <label for="siglas">Siglas del país: </label>
+        <input type="text" id="siglas" name="siglas" value="EU"><br>
+        
+        <label for="nombre">Nombre del país: </label>
+        <input type="text" id="nombre" name="nombre" value="Euskadi"><br>
+        
+        <label for="">Población del país: </label>
+        <input type="int" id="poblacion" name="poblacion" value="100000000"><br>
+        
+        <label for="extension">Extensión del país: </label>
+        <input type="int" id="extension" name="extension" value="45000"><br>
+        
+        <label for="temperatura">Temperatura media anual del país: </label>
+        <input type="int" id="temperatura" name="temperatura" value="13"><br>
+        
+        <label for="lluvia">LLuvia media anual del país: </label>
+        <input type="int" id="lluvia" name="lluvia" value="3500"><br>
+    
+        <input type="submit" value="Enviar">
+
+    </form>
+</body>
+</html>

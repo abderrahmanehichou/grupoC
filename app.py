@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from Models import db, Paises
 from logging import exception
 
@@ -11,7 +11,7 @@ db.init_app(app)
 #Aquí empiezan las rutas
 @app.route("/")
 def home():
-    return "<h1>Welcome home</h1>"
+    return render_template("index.html")
 
 
 @app.route("/api/paises", methods=["GET"])
@@ -27,32 +27,33 @@ def getPaises():
         exception("[SERVER]: Error ->")
         return jsonify({"msg": "Ha ocurrido un error"}), 500
 
-@app.route("/api/pais", methods=["GET"])
-def getPaisByName():
+@app.route("/api/pais/<string:nombre>", methods=["GET"])
+def getPaisByName(nombre):
     try:
-        nombrePais = request.args["nombre"]
-        pais = Paises.query.filter_by(nombre=nombrePais).first()
-        if not pais:
-            return jsonify({"msg": "Este país no está en la lista"}), 200
-        else:
-            return jsonify(pais.serialize()), 200
-    except Exception:
-        exception("[SERVER]: Error ->")
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
-    
-@app.route("/api/pais/<string:siglas>", methods=["GET"])
-def getPaisBySigla(siglas):
-    try:
-        pais = Paises.query.get(siglas)
+        pais = Paises.query.filter_by(nombre=nombre).first()
         if not pais:
             return jsonify({"msg": "Este país no está en la lista"}), 200
         else:
             return jsonify(pais.serialize()), 200
     except Exception as e:
-        print("[SERVER]: Error ->", e)
+        exception("[SERVER]: Error ->", e)
         return jsonify({"msg": "Ha ocurrido un error"}), 500
 
-@app.route("/api/pais/<int:poblacion>", methods=["GET"])
+    
+@app.route("/api/pais/siglas/<string:siglas>", methods=["GET"])
+def getPaisBySiglas(siglas):
+    try:
+        pais = Paises.query.filter_by(siglas=siglas).first()
+        if not pais:
+            return jsonify({"msg": "Este país no está en la lista"}), 200
+        else:
+            return jsonify(pais.serialize()), 200
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
+
+
+@app.route("/api/pais/poblacion/<int:poblacion>", methods=["GET"])
 def getPaisesByPoblacion(poblacion):
     try:
         paises = Paises.query.filter_by(poblacion=poblacion).all()
@@ -111,6 +112,31 @@ def deletePais(siglas):
     except Exception as e:
         exception("[SERVER]: Error ->", e)
         return jsonify({"msg": "Ha ocurrido un error"}), 500
+
+#Aquí empiezan las rutas de front
+
+
+@app.route("/api/addpais", methods=["POST"])
+def addpais():
+    try:
+        siglas = request.form["siglas"]
+        nombre = request.form["nombre"]
+        poblacion = request.form["poblacion"]
+        extension = request.form["extension"]
+        temperatura = request.form["temperatura"]
+        lluvia = request.form["lluvia"]
+
+        pais = Paises(siglas, nombre, int(poblacion), int(extension), int(temperatura), int(lluvia) )
+        db.session.add(pais)
+        db.session.commit()
+
+        return jsonify(pais.serialize()), 200
+    
+    except Exception:
+        exception("\n[SERVER]: Error in route /api/addpais. Log: \n")
+        return jsonify({"msg": "Algo ha salido mal"}), 500
+
+
 
 
 

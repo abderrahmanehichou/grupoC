@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy # type: ignore
 
 db = SQLAlchemy()
 
-class Plants(db.Model):
+class Paises(db.Model):
 
     rowid = db.Column(db.Integer, primary_key=True)
     siglas = db.Column(db.String(5), unique=True, nullable=False)
@@ -11,6 +11,16 @@ class Plants(db.Model):
     extension = db.Column(db.Integer, unique=False, nullable=False)
     temperatura = db.Column(db.Integer, unique=False, nullable=False)
     lluvia = db.Column(db.Integer, unique=False, nullable=False)
+
+    def __init__(self, siglas, nombre, poblacion, extension, temperatura, lluvia):
+        super().__init__()
+        self.siglas = siglas
+        self.nombre = nombre
+        self.poblacion = poblacion
+        self.extension = extension
+        self.temperatura = temperatura
+        self.lluvia = lluvia
+
 
     def __str__(self):
         return "\Siglas: {}. Nombre: {}. Poblacion: {}. Extension: {}. Temperatura: {}. LLuvia: {}. \n".format(
