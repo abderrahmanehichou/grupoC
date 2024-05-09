@@ -13,6 +13,10 @@ db.init_app(app)
 def home():
     return render_template("index.html")
 
+@app.route("/searchpais", methods=["GET"])
+def searchpais():
+    return render_template("searchpais.html")
+
 
 @app.route("/api/paises", methods=["GET"])
 def getPaises():
@@ -136,6 +140,21 @@ def addpais():
         exception("\n[SERVER]: Error in route /api/addpais. Log: \n")
         return jsonify({"msg": "Algo ha salido mal"}), 500
 
+
+# Buscar mediante formulario
+@app.route("/api/searchpais", methods=["POST"])
+def searchPaisForm():
+    try:
+        namePais = request.form["nombre"]
+
+        pais = Paises.query.filter(Paises.nombre.like(f"%{namePais}%")).first()
+        if not pais:
+            return jsonify({"msg": "Este país no está en la lista"}), 200
+        else:
+            return jsonify(pais.serialize()), 200
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
 
 
 
