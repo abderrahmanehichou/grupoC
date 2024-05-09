@@ -30,19 +30,19 @@ def getPaises():
     except Exception:
         
         exception("[SERVER]: Error ->")
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
 
 @app.route("/api/pais/<string:nombre>", methods=["GET"])
 def getPaisByName(nombre):
     try:
         pais = Paises.query.filter_by(nombre=nombre).first()
         if not pais:
-            return jsonify({"msg": "Este país no está en la lista"}), 200
+            return render_template("dont_exist.html"), 200
         else:
             return jsonify(pais.serialize()), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
 
     
 @app.route("/api/pais/siglas/<string:siglas>", methods=["GET"])
@@ -50,12 +50,12 @@ def getPaisBySiglas(siglas):
     try:
         pais = Paises.query.filter_by(siglas=siglas).first()
         if not pais:
-            return jsonify({"msg": "Este país no está en la lista"}), 200
+            return render_template("dont_exist.html"), 200
         else:
             return jsonify(pais.serialize()), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
 
 
 @app.route("/api/pais/poblacion/<int:poblacion>", methods=["GET"])
@@ -82,7 +82,7 @@ def addPais():
         return jsonify({"msg": "País agregado correctamente"}), 201
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
     
 
 
@@ -92,7 +92,7 @@ def updatePais(siglas):
     try:
         pais = Paises.query.get(siglas)
         if not pais:
-            return jsonify({"msg": "Este país no está en la lista"}), 404
+            return render_template("dont_exist.html"), 404
         data = request.json
         for key, value in data.items():
             setattr(pais, key, value)
@@ -100,7 +100,7 @@ def updatePais(siglas):
         return jsonify({"msg": "País actualizado correctamente"}), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
     
 
 
@@ -110,13 +110,13 @@ def deletePais(siglas):
     try:
         pais = Paises.query.get(siglas)
         if not pais:
-            return jsonify({"msg": "Este país no está en la lista"}), 404
+            return render_template("dont_exist.html"), 404
         db.session.delete(pais)
         db.session.commit()
         return jsonify({"msg": "País eliminado correctamente"}), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
 
 #Aquí empiezan las rutas de front
 
@@ -139,7 +139,7 @@ def addpais():
     
     except Exception:
         exception("\n[SERVER]: Error in route /api/addpais. Log: \n")
-        return jsonify({"msg": "Algo ha salido mal"}), 500
+        return render_template("error.html"), 500
 
 
 # Buscar mediante formulario
@@ -150,12 +150,12 @@ def searchPaisForm():
 
         pais = Paises.query.filter(Paises.nombre.like(f"%{namePais}%")).first()
         if not pais:
-            return jsonify({"msg": "Este país no está en la lista"}), 200
+            return render_template("result.html", pais=pais), 200
         else:
             return render_template("result.html", pais=pais.serialize())
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
 
 
 
@@ -171,9 +171,30 @@ def deletePaisForm():
         return render_template("delete_success.html"), 200  # Renderiza el template HTML
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return render_template("error.html"), 500
 
+@app.route("/api/pais/search", methods=["POST"])
+def searchPaisFormu():
+    try:
+        namePais = request.form["nombre"]
 
+        pais = Paises.query.filter(Paises.nombre.like(f"%{namePais}%")).first()
+        if not pais:
+            return render_template("result.html", pais=pais), 200
+        else:
+            return render_template("result.html", pais=pais.serialize())
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return render_template("error.html"), 500
+    
+@app.route("/paises")
+def listPaises():
+    try:
+        paises = Paises.query.all()
+        return render_template("list_paises.html", paises=paises)
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return render_template("error.html"), 500
 
 if __name__ =="__main__":
     app.run(debug=True, port=5000)

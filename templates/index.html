@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Principal</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Añade una nueva ciudad</h1>
@@ -34,7 +35,17 @@
     <form action="/api/pais/delete" method="POST">
         <label for="nombre_eliminar">Nombre del país a eliminar: </label>
         <input type="text" id="nombre_eliminar" name="nombre" placeholder="Nombre del país"><br>
-        <input type="submit" value="Eliminar país">
+        <input type="submit" value="Eliminar">
     </form>
+
+    <h1>Buscar país</h1>
+    <form action="/api/pais/search" method="POST">
+        <label for="nombre_buscar">Nombre del país a buscar: </label>
+        <input type="text" id="nombre_buscar" name="nombre" placeholder="Nombre del país"><br>
+        <input type="submit" value="Buscar">
+    </form>
+
+    <button onclick="window.location.href='/paises';">Todos los paises</button>
+    
 </body>
 </html>
