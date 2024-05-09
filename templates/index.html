@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Página Principal</title>
 </head>
 <body>
     <h1>Añade una nueva ciudad</h1>
@@ -24,11 +24,17 @@
         <label for="temperatura">Temperatura media anual del país: </label>
         <input type="int" id="temperatura" name="temperatura" value="13"><br>
         
-        <label for="lluvia">LLuvia media anual del país: </label>
+        <label for="lluvia">Lluvia media anual del país: </label>
         <input type="int" id="lluvia" name="lluvia" value="3500"><br>
     
         <input type="submit" value="Enviar">
+    </form>
 
+    <h1>Eliminar país</h1>
+    <form action="/api/pais/delete" method="POST">
+        <label for="nombre_eliminar">Nombre del país a eliminar: </label>
+        <input type="text" id="nombre_eliminar" name="nombre" placeholder="Nombre del país"><br>
+        <input type="submit" value="Eliminar país">
     </form>
 </body>
 </html>

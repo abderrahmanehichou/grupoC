@@ -5,6 +5,7 @@ from logging import exception
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../database/paises.db"
 app.config["SQLALCHEMY_TRAK_MODIFICATIONS"] = False
+app.config["JSON_AS_ASCII"] = False  # Configurar para que los JSON utilicen UTF-8
 db.init_app(app)
 
 
@@ -151,12 +152,26 @@ def searchPaisForm():
         if not pais:
             return jsonify({"msg": "Este país no está en la lista"}), 200
         else:
-            return jsonify(pais.serialize()), 200
+            return render_template("result.html", pais=pais.serialize())
     except Exception as e:
         exception("[SERVER]: Error ->", e)
         return jsonify({"msg": "Ha ocurrido un error"}), 500
 
 
+
+@app.route("/api/pais/delete", methods=["POST", "DELETE"])
+def deletePaisForm():
+    try:
+        nombre = request.form.get("nombre")
+        pais = Paises.query.filter_by(nombre=nombre).first()
+        if not pais:
+            return render_template("dont_exist.html"), 404
+        db.session.delete(pais)
+        db.session.commit()
+        return render_template("delete_success.html"), 200  # Renderiza el template HTML
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return jsonify({"msg": "Ha ocurrido un error"}), 500
 
 
 

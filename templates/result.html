@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado de búsqueda</title>
+</head>
+<body>
+    <h1>Resultado de búsqueda</h1>
+    {% if pais %}
+    <p>Nombre: {{ pais.nombre }}</p>
+    <p>Siglas: {{ pais.siglas }}</p>
+    <p>Población: {{ pais.poblacion }}</p>
+    <p>Extensión: {{ pais.extension }}</p>
+    <p>Temperatura media: {{ pais.temperatura }}</p>
+    <p>LLuvia media: {{ pais.lluvia }}</p>
+    <!-- Agrega más campos aquí según tu modelo -->
+    {% else %}
+    <p>No se encontraron resultados para la búsqueda.</p>
+    {% endif %}
+</body>
+</html>
