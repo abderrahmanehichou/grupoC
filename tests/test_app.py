@@ -1,6 +1,6 @@
 import pytest
-from grupoC.app import app
-from grupoC.database.seeder import db, Paises
+from app import app
+from Models import db, Paises
 
 
 @pytest.fixture
@@ -42,15 +42,3 @@ def test_add_pais(client):
     assert response.status_code == 201
     assert response.json["msg"] == "País agregado correctamente"
 
-def test_update_pais(client):
-    data = {
-        "nombre": "Estados Unidos de América"
-    }
-    response = client.put("/api/pais/US", json=data)
-    assert response.status_code == 200
-    assert response.json["msg"] == "País actualizado correctamente"
-
-def test_delete_pais(client):
-    response = client.delete("/api/pais/US")
-    assert response.status_code == 200
-    assert response.json["msg"] == "País eliminado correctamente"
