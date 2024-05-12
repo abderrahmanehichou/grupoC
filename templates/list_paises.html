@@ -3,14 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Países</title>
-    <link rel="stylesheet" href="style.css">
+    <title>divstado de Países</title>
 </head>
+<style>
+    :root{
+        margin: 0.5rem;
+        padding: 0;
+        text-decoration: none;
+        background-color: rgb(236, 184, 246);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    h1 {
+        color: rgb(86, 58, 92);
+    }
+    button{
+        background-color: rgb(86, 58, 92);
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.8rem;
+        color: rgb(236, 184, 246);
+    }
+    .contenedor-paises{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+    .contenedor-pais{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 3px solid rgb(86, 58, 92);
+        border-radius: 0.8rem;
+        padding: 1rem;
+        margin: 0.3rem;
+        width: 17rem;
+    }
+    .contenedor-general{
+
+    padding: 1rem;
+    margin: 0.3rem;
+}
+    </style>
 <body>
+<div class="contenedor-general">
+    <button onclick="window.location.href='/';">Volver</button>
     <h1>Listado de Países</h1>
-    <ul>
+    <div class="contenedor-paises">
         {% for pais in paises %}
-        <li>
+        <div class="contenedor-pais">
             <p>Nombre: {{ pais.nombre }}</p>
             <p>Siglas: {{ pais.siglas }}</p>
             <p>Población: {{ pais.poblacion }}</p>
@@ -18,8 +62,9 @@
             <p>Temperatura media: {{ pais.temperatura }}</p>
             <p>LLuvia media: {{ pais.lluvia }}</p>
             <!-- Agrega más campos aquí según tu modelo -->
-        </li>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
+</div>
 </body>
 </html>

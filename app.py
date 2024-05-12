@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, Response
 from Models import db, Paises
 from logging import exception
 
@@ -135,7 +135,7 @@ def addpais():
         db.session.add(pais)
         db.session.commit()
 
-        return jsonify(pais.serialize()), 200
+        return render_template("add_pais.html", pais=pais.serialize())
     
     except Exception:
         exception("\n[SERVER]: Error in route /api/addpais. Log: \n")
@@ -195,6 +195,59 @@ def listPaises():
     except Exception as e:
         exception("[SERVER]: Error ->", e)
         return render_template("error.html"), 500
+    
+@app.route("/api/modificarpais", methods=["POST"])
+def modificarpais():
+    try:
+        nombre_pais = request.form.get("nombre")
+        pais = Paises.query.filter_by(nombre=nombre_pais).first()
+        if not pais:
+            return render_template("dont_exist.html"), 404
+        return render_template("modify_pais.html", pais=pais.serialize()), 200
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return render_template("error.html"), 500
+
+@app.route("/api/modificarpais/<string:siglas>", methods=["POST"])
+def modificarPais(siglas):
+    try:
+        pais = Paises.query.filter_by(siglas=siglas).first()
+
+        if not pais:
+            return render_template("dont_exist.html"), 404
+        
+        # Actualizar los campos del país según los datos enviados en el formulario
+        data = request.form
+        for key, value in data.items():
+            setattr(pais, key, value)
+        
+        db.session.commit()
+        return render_template("modify_ok.html", pais=pais.serialize())
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return render_template("error.html"), 500
+
+
+
+
+""" @app.route("/api/pais/<string:siglas>", methods=["POST"])
+def guardarCambiosPais(siglas):
+    try:
+        pais = Paises.query.get(siglas)
+        pais = Paises.query.filter(Paises.nombre.like(f"%{namePais}%")).first()
+        if not pais:
+            return render_template("dont_exist.html"), 404
+        data = request.form
+        # Actualizar los campos del país según los datos enviados en el formulario
+        for key, value in data.items():
+            setattr(pais, key, value)
+        db.session.commit()
+        return jsonify({"msg": "Los cambios se guardaron correctamente"}), 200
+    except Exception as e:
+        exception("[SERVER]: Error ->", e)
+        return render_template("error.html"), 500 """
+
+
 
 if __name__ =="__main__":
     app.run(debug=True, port=5000)

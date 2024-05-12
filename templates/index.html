@@ -4,9 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Principal</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+<!--     <link rel="stylesheet" href="style.css">
+ --></head>
+<style>
+:root{
+    margin: 0.5rem;
+    padding: 0;
+    text-decoration: none;
+    background-color: rgb(236, 184, 246);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+h1 {
+    color: rgb(86, 58, 92);
+}
+label,
+input {
+    margin: 0.3rem;
+}
+.anadir {
+    border: 3px solid rgb(86, 58, 92);
+    border-radius: 0.8rem;
+    padding: 1rem;
+    margin: 0.3rem;
+}
+button,
+.boton{
+    background-color: rgb(86, 58, 92);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.8rem;
+    color: rgb(236, 184, 246);
+}
+</style>
 <body>
+<div class="anadir">
     <h1>Añade una nueva ciudad</h1>
 
     <form action="/api/addpais" method="post">
@@ -16,7 +49,7 @@
         <label for="nombre">Nombre del país: </label>
         <input type="text" id="nombre" name="nombre" value="Euskadi"><br>
         
-        <label for="">Población del país: </label>
+        <label for="poblacion">Población del país: </label>
         <input type="int" id="poblacion" name="poblacion" value="100000000"><br>
         
         <label for="extension">Extensión del país: </label>
@@ -28,22 +61,38 @@
         <label for="lluvia">Lluvia media anual del país: </label>
         <input type="int" id="lluvia" name="lluvia" value="3500"><br>
     
-        <input type="submit" value="Enviar">
+        <input class="boton" type="submit" value="Enviar">
     </form>
 
+
+</div>
+
+<div class="anadir">
     <h1>Eliminar país</h1>
     <form action="/api/pais/delete" method="POST">
         <label for="nombre_eliminar">Nombre del país a eliminar: </label>
         <input type="text" id="nombre_eliminar" name="nombre" placeholder="Nombre del país"><br>
-        <input type="submit" value="Eliminar">
+        <input class="boton" type="submit" value="Eliminar">
     </form>
-
+</div>
+<div class="anadir">
     <h1>Buscar país</h1>
     <form action="/api/pais/search" method="POST">
         <label for="nombre_buscar">Nombre del país a buscar: </label>
         <input type="text" id="nombre_buscar" name="nombre" placeholder="Nombre del país"><br>
-        <input type="submit" value="Buscar">
+        <input class="boton" type="submit" value="Buscar">
     </form>
+</div>
+
+<div class="anadir">
+    <h1>Modifica una ciudad</h1>
+
+    <form action="/api/modificarpais" method="POST">
+        <label for="nombre_modificar">Nombre del país a modificar: </label>
+        <input type="text" id="nombre_modificar" name="nombre" value="Euskadi" placeholder="Nombre del país"><br>
+        <input class="boton" type="submit" value="Modificar">
+    </form>
+</div>
 
     <button onclick="window.location.href='/paises';">Todos los paises</button>
     

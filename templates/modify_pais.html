@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar país</title>
+</head>
+<style>
+    :root{
+        margin: 0.5rem;
+        padding: 0;
+        text-decoration: none;
+        background-color: rgb(236, 184, 246);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    h1 {
+        color: rgb(86, 58, 92);
+    }
+    button{
+        background-color: rgb(86, 58, 92);
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.8rem;
+        color: rgb(236, 184, 246);
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    label {
+        margin-bottom: 0.5rem;
+    }
+    input {
+        margin-bottom: 1rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.4rem;
+        border: 1px solid rgb(86, 58, 92);
+    }
+</style>
+<body>
+    <h1>Modifica un país</h1>
+
+    <button onclick="window.location.href='/';">Volver</button>
+
+    <form action="/api/modificarpais/{{ pais.siglas }}" method="POST">      
+        <!-- Puedes ocultar el campo de siglas si no es editable -->
+        <input type="hidden" name="siglas" value="{{ pais.siglas }}">
+        
+        <label for="nombre">Nombre del país: </label>
+        <input type="text" id="nombre" name="nombre" value="{{ pais.nombre }}"><br>
+        
+        <label for="poblacion">Población del país: </label>
+        <input type="int" id="poblacion" name="poblacion" value="{{ pais.poblacion }}"><br>
+        
+        <label for="extension">Extensión del país: </label>
+        <input type="int" id="extension" name="extension" value="{{ pais.extension }}"><br>
+        
+        <label for="temperatura">Temperatura media anual del país: </label>
+        <input type="int" id="temperatura" name="temperatura" value="{{ pais.temperatura }}"><br>
+        
+        <label for="lluvia">Lluvia media anual del país: </label>
+        <input type="int" id="lluvia" name="lluvia" value="{{ pais.lluvia }}"><br>
+    
+        <input type="submit" value="Guardar cambios">
+    </form>
+</body>
+</html>
