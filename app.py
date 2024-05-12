@@ -14,12 +14,12 @@ db.init_app(app)
 def home():
     return render_template("index.html")
 
-@app.route("/searchpais", methods=["GET"])
+""" @app.route("/searchpais", methods=["GET"])
 def searchpais():
-    return render_template("searchpais.html")
+    return render_template("searchpais.html") """
 
 
-@app.route("/api/paises", methods=["GET"])
+""" @app.route("/api/paises", methods=["GET"])
 def getPaises():
     try:
         
@@ -30,9 +30,9 @@ def getPaises():
     except Exception:
         
         exception("[SERVER]: Error ->")
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 """
 
-@app.route("/api/pais/<string:nombre>", methods=["GET"])
+""" @app.route("/api/pais/<string:nombre>", methods=["GET"])
 def getPaisByName(nombre):
     try:
         pais = Paises.query.filter_by(nombre=nombre).first()
@@ -42,10 +42,10 @@ def getPaisByName(nombre):
             return jsonify(pais.serialize()), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 """
 
     
-@app.route("/api/pais/siglas/<string:siglas>", methods=["GET"])
+""" @app.route("/api/pais/siglas/<string:siglas>", methods=["GET"])
 def getPaisBySiglas(siglas):
     try:
         pais = Paises.query.filter_by(siglas=siglas).first()
@@ -55,10 +55,10 @@ def getPaisBySiglas(siglas):
             return jsonify(pais.serialize()), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 """
 
 
-@app.route("/api/pais/poblacion/<int:poblacion>", methods=["GET"])
+""" @app.route("/api/pais/poblacion/<int:poblacion>", methods=["GET"])
 def getPaisesByPoblacion(poblacion):
     try:
         paises = Paises.query.filter_by(poblacion=poblacion).all()
@@ -68,11 +68,11 @@ def getPaisesByPoblacion(poblacion):
             return jsonify([pais.serialize() for pais in paises]), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return jsonify({"msg": "Ha ocurrido un error"}), 500
+        return jsonify({"msg": "Ha ocurrido un error"}), 500 """
 
 
 
-@app.route("/api/pais", methods=["POST"])
+""" @app.route("/api/pais", methods=["POST"])
 def addPais():
     try:
         data = request.json
@@ -82,12 +82,12 @@ def addPais():
         return jsonify({"msg": "País agregado correctamente"}), 201
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 """
     
 
 
 
-@app.route("/api/pais/<string:siglas>", methods=["PUT"])
+""" @app.route("/api/pais/<string:siglas>", methods=["PUT"])
 def updatePais(siglas):
     try:
         pais = Paises.query.get(siglas)
@@ -100,12 +100,12 @@ def updatePais(siglas):
         return jsonify({"msg": "País actualizado correctamente"}), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 """
     
 
 
 
-@app.route("/api/pais/<string:siglas>", methods=["DELETE"])
+""" @app.route("/api/pais/<string:siglas>", methods=["DELETE"])
 def deletePais(siglas):
     try:
         pais = Paises.query.get(siglas)
@@ -116,7 +116,7 @@ def deletePais(siglas):
         return jsonify({"msg": "País eliminado correctamente"}), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 """
 
 #Aquí empiezan las rutas de front
 
@@ -143,7 +143,7 @@ def addpais():
 
 
 # Buscar mediante formulario
-@app.route("/api/searchpais", methods=["POST"])
+""" @app.route("/api/searchpais", methods=["POST"])
 def searchPaisForm():
     try:
         namePais = request.form["nombre"]
@@ -155,7 +155,7 @@ def searchPaisForm():
             return render_template("result.html", pais=pais.serialize())
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 """
 
 
 
@@ -196,6 +196,8 @@ def listPaises():
         exception("[SERVER]: Error ->", e)
         return render_template("error.html"), 500
     
+
+
 @app.route("/api/modificarpais", methods=["POST"])
 def modificarpais():
     try:
@@ -206,7 +208,7 @@ def modificarpais():
         return render_template("modify_pais.html", pais=pais.serialize()), 200
     except Exception as e:
         exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500
+        return render_template("error.html"), 500 
 
 @app.route("/api/modificarpais/<string:siglas>", methods=["POST"])
 def modificarPais(siglas):
@@ -229,25 +231,6 @@ def modificarPais(siglas):
 
 
 
-
-""" @app.route("/api/pais/<string:siglas>", methods=["POST"])
-def guardarCambiosPais(siglas):
-    try:
-        pais = Paises.query.get(siglas)
-        pais = Paises.query.filter(Paises.nombre.like(f"%{namePais}%")).first()
-        if not pais:
-            return render_template("dont_exist.html"), 404
-        data = request.form
-        # Actualizar los campos del país según los datos enviados en el formulario
-        for key, value in data.items():
-            setattr(pais, key, value)
-        db.session.commit()
-        return jsonify({"msg": "Los cambios se guardaron correctamente"}), 200
-    except Exception as e:
-        exception("[SERVER]: Error ->", e)
-        return render_template("error.html"), 500 """
-
-
-
 if __name__ =="__main__":
     app.run(debug=True, port=5000)
+
