@@ -172,6 +172,7 @@ def deletePaisForm():
     except Exception as e:
         exception("[SERVER]: Error ->", e)
         return render_template("error.html"), 500
+        
 
 @app.route("/api/pais/search", methods=["POST"])
 def searchPaisFormu():
